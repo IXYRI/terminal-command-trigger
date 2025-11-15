@@ -1,0 +1,102 @@
+{
+  "name": "terminal-command-trigger",
+  "displayName": "Terminal Command Trigger",
+  "description": "Trigger VSCode commands when shell commands are executed. Perfect for auto-restarting clangd before builds.",
+  "version": "0.1.0",
+  "publisher": "your-publisher-name",
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "terminal",
+    "clangd",
+    "xmake",
+    "build",
+    "automation",
+    "shell",
+    "trigger"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Terminal Command Trigger",
+      "properties": {
+        "terminalCommandTrigger.triggers": {
+          "type": "array",
+          "default": [
+            {
+              "pattern": "^xmake\\b",
+              "onStart": "ext:llvm-vs-code-extensions.vscode-clangd:client.stop",
+              "onEnd": "ext:llvm-vs-code-extensions.vscode-clangd:client.start",
+              "description": "Stop clangd before xmake build, start after completion"
+            }
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "description": "Regular expression to match terminal command"
+              },
+              "onStart": {
+                "type": "string",
+                "description": "Action to execute when command starts. Use 'ext:extensionId:api.path' for extension API calls, or command name for VSCode commands."
+              },
+              "onEnd": {
+                "type": "string",
+                "description": "Action to execute when command ends. Use 'ext:extensionId:api.path' for extension API calls, or command name for VSCode commands."
+              },
+              "description": {
+                "type": "string",
+                "description": "Human-readable description of this trigger"
+              }
+            },
+            "required": [
+              "pattern"
+            ]
+          },
+          "description": "List of terminal command patterns and their corresponding actions",
+          "markdownDescription": "Configure triggers for terminal commands.\n\n**Action syntax:**\n- VSCode command: `clangd.restart`\n- Extension API: `ext:extension-id:api.path`\n\n**Examples:**\n- `ext:llvm-vs-code-extensions.vscode-clangd:client.stop`\n- `workbench.action.tasks.runTask`"
+        },
+        "terminalCommandTrigger.showNotification": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show status bar notification when a command is triggered"
+        },
+        "terminalCommandTrigger.notificationDuration": {
+          "type": "number",
+          "default": 3000,
+          "minimum": 500,
+          "maximum": 10000,
+          "description": "Duration (in milliseconds) to show the status bar notification"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.88.0",
+    "@typescript-eslint/eslint-plugin": "^6.x",
+    "@typescript-eslint/parser": "^6.x",
+    "eslint": "^8.x",
+    "typescript": "^5.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/terminal-command-trigger"
+  },
+  "license": "MIT"
+}
