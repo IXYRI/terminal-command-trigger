@@ -3,7 +3,7 @@
   "displayName": "Terminal Command Trigger",
   "description": "Trigger VSCode commands when shell commands are executed. Perfect for auto-restarting clangd before builds.",
   "version": "0.1.0",
-  "publisher": "your-publisher-name",
+  "publisher": "IXYRI",
   "engines": {
     "vscode": "^1.88.0"
   },
@@ -80,11 +80,10 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts"
+    "package": "bun run compile && bunx @vscode/vsce package --no-dependencies",
+    "pretest": "bun run compile"
   },
   "devDependencies": {
     "@types/node": "^20.x",
@@ -96,7 +95,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/terminal-command-trigger"
+    "url": "https://github.com/IXYRI/terminal-command-trigger"
   },
   "license": "MIT"
 }
